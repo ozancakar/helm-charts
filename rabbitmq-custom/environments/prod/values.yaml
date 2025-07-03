@@ -1,0 +1,46 @@
+replicaCount: 3
+
+image:
+  repository: rabbitmq
+  tag: "4.1.1"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: 5672
+
+    - name: management
+      port: 15672
+      targetPort: 15672
+
+    - name: prometheus
+      port: 9419
+      targetPort: 9419
+
+serviceAccount:
+  enabled: true
+  name: ""
+
+rabbitmq:
+  username: produser
+  password: prodpass
+
+ingress:
+  enabled: false
+
+hpa:
+  enabled: true
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+metrics:
+  enabled: true
+  prometheus:
+    scrapePort: 9419
